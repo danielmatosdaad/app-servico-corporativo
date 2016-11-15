@@ -24,6 +24,8 @@
 		<class>br.com.app.smart.business.model.Funcionalidade</class>
 		<class>br.com.app.smart.business.model.GrupoFuncionalidade</class>
 		<class>br.com.app.smart.business.model.MetaDado</class>
+	    <class>br.com.app.smart.business.model.Identificador</class>
+		
 		<properties>
 			<!-- Properties for Hibernate -->
 			<property name="hibernate.hbm2ddl.auto" value="create-drop" />

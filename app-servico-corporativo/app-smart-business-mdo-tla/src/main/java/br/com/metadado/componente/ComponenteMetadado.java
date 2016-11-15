@@ -2,7 +2,6 @@ package br.com.metadado.componente;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import br.com.app.smart.business.exception.InfraEstruturaException;
 import br.com.app.smart.business.exception.NegocioException;
 import br.com.projeto.metadado.infra.comum.MetadadoUI;
@@ -23,9 +22,10 @@ public class ComponenteMetadado implements IComponenteMetadado {
 
 	@Override
 	public MetadadoUI gerar(ObterMetaDadoDTO obterMetaDadoDTO) throws InfraEstruturaException, NegocioException {
-		MetadadoUI metadoUI = regrasNavegacao.funcionalidadeMetadado(obterMetaDadoDTO);
+		MetadadoUI metadoUI = this.regrasNavegacao.funcionalidadeMetadado(obterMetaDadoDTO);
 
 		return metadoUI;
 	}
+
 
 }

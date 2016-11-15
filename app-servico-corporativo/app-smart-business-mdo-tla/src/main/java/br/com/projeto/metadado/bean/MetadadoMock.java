@@ -3,6 +3,10 @@ package br.com.projeto.metadado.bean;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.projeto.metadado.infra.comum.IdentificadorWrapper;
+import br.com.projeto.metadado.infra.comum.MetadadoUI;
+import br.com.projeto.metadado.regras.RegrasMetadado;
+
 public class MetadadoMock {
 
 	
@@ -317,5 +321,13 @@ public static MetaDado criarMetadadoTelaComprovantePagamentoTitulo() {
 
 		return metadado;
 	
+}
+public static void main(String args[]){
+	RegrasMetadado regrasMetadado = new RegrasMetadado();
+	
+	MetadadoUI metaDadoUI = regrasMetadado.converterMetadadoUI(criarMetadadoLogin());
+	for (IdentificadorWrapper identificadorWrapper : metaDadoUI.getIdentificadoreNegocialMetadados()) {
+		System.out.println(identificadorWrapper.getWrapper().getId());
+	}
 }
 }

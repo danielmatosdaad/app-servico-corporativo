@@ -20,6 +20,7 @@ import br.com.app.smart.business.dao.interfaces.IServicoLocalDAO;
 import br.com.app.smart.business.dao.interfaces.IServicoRemoteDAO;
 import br.com.app.smart.business.funcionalidade.dto.FuncionalidadeDTO;
 import br.com.app.smart.business.funcionalidade.dto.GrupoFuncionalidadeDTO;
+import br.com.app.smart.business.funcionalidade.dto.IdentificadorDTO;
 import br.com.app.smart.business.funcionalidade.dto.MetaDadoDTO;
 import br.com.app.smart.business.funcionalidade.dto.PerfilDTO;
 import br.com.app.smart.business.parametro.dto.ParametroDTO;
@@ -65,6 +66,9 @@ public class RemoteServiceProvider implements Serializable {
 	@EJB(lookup = "java:global/app-corporativo/app-smart-business-usr/UsuarioServiceImp!br.com.app.smart.business.dao.interfaces.IServicoRemoteDAO", beanName = "UsuarioServiceImp", beanInterface = IServicoRemoteDAO.class)
 	private IServicoRemoteDAO<UsuarioDTO> usuarioService;
 
+	@EJB(lookup = "java:global/app-corporativo/app-smart-business-fnc-mdo/IdentificadorServiceImp!br.com.app.smart.business.dao.interfaces.IServicoRemoteDAO", beanName = "IdentificadorServiceImp", beanInterface = IServicoRemoteDAO.class)
+	private IServicoRemoteDAO<IdentificadorDTO> identificadorService;
+	
 	@Default
 	@Produces
 	public IServicoRemoteDAO<ParametroDTO> getParametroService() {
@@ -124,6 +128,13 @@ public class RemoteServiceProvider implements Serializable {
 	@Produces
 	public IServicoRemoteDAO<UsuarioDTO> getUsuarioService() {
 		return usuarioService;
+	}
+	
+	
+	@Default
+	@Produces
+	public IServicoRemoteDAO<IdentificadorDTO> getIdentificadorService() {
+		return identificadorService;
 	}
 
 	/**

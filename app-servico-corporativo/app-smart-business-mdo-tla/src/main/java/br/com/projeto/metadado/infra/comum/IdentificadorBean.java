@@ -4,10 +4,9 @@ import java.util.EnumSet;
 
 public enum IdentificadorBean implements Identificador<IdentificadorBean> {
 
-	MENU_PRINCIPAL_BEAN("idMenuPrincipal"), 
-	PAINEL_CONFIRMACAO_PAGAMENTO_BEAN("idPainelConfirmacaoPagamentoTitulo"), 
-	PAINEL_COMPROVANTE_PAGAMENTO_BEAN("idPainelComprovantePagamentoTitulo"),  
-	TABELA_CONFIRMACAO("idTabelaConfirmacao");
+	MENU_PRINCIPAL_BEAN("idMenuPrincipal"), PAINEL_CONFIRMACAO_PAGAMENTO_BEAN(
+			"idPainelConfirmacaoPagamentoTitulo"), PAINEL_COMPROVANTE_PAGAMENTO_BEAN(
+					"idPainelComprovantePagamentoTitulo"), TABELA_CONFIRMACAO("idTabelaConfirmacao");
 
 	IdentificadorBean(String id) {
 		this.id = id;
@@ -28,8 +27,8 @@ public enum IdentificadorBean implements Identificador<IdentificadorBean> {
 
 	public static IdentificadorBean getInstancia(String valor) {
 
-		for (IdentificadorBean identificador : EnumSet
-				.allOf(IdentificadorBean.class)) {
+		EnumSet<IdentificadorBean> enumSet = EnumSet.allOf(IdentificadorBean.class);
+		for (IdentificadorBean identificador : enumSet) {
 
 			if (identificador.getId().equals(valor)) {
 

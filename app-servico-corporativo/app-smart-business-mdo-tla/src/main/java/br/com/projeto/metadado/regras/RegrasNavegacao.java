@@ -1,5 +1,7 @@
 package br.com.projeto.metadado.regras;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -14,15 +16,17 @@ import br.com.projeto.metadado.regras.IRegrasMetaDado;
 @Named
 public class RegrasNavegacao implements IRegrasNavegacao {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Inject
 	private IRegrasMetaDado regrasMetadados;
 
 	public MetadadoUI funcionalidadeMetadado(
 			ObterMetaDadoDTO obterMetaDadoDTO) throws InfraEstruturaException, NegocioException {
 		MetaDado mdo = buscarMetadado(obterMetaDadoDTO);
-		MetadadoUI metadadoUi = this.regrasMetadados.funcionalidadeMetadado(
-				obterMetaDadoDTO.getNumeroTela(),
-				obterMetaDadoDTO.getNumeroFuncionalidade(), mdo);
+		MetadadoUI metadadoUi = this.regrasMetadados.converterMetadadoUI(mdo);
 		return metadadoUi;
 	}
 
@@ -33,5 +37,6 @@ public class RegrasNavegacao implements IRegrasNavegacao {
 				obterMetaDadoDTO.getNumeroTela(),
 				obterMetaDadoDTO.getNumeroFuncionalidade());
 	}
+
 
 }

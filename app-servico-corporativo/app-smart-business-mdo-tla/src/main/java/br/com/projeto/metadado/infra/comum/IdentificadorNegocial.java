@@ -18,6 +18,8 @@ public enum IdentificadorNegocial implements
 	IDCODIGOBARRASCAMPO4("idCodigoBarrasCampo4"),
 	IDCODIGOBARRASCAMPOCOMPLEOTO("idCodigoBarrasCompleto"),
 	IDLABELCODIGOBARRASCONFIRMACAO("idLabelCodigoBarrasConfirmacao"),
+	IDNEGOCIALLABEL("idNegocialLabel"),
+	IDBOTAO("idNegocialBotao"),
 	PARAMETRO_OCULTO("idParametroOculto");
 
 	private String id;
@@ -34,9 +36,9 @@ public enum IdentificadorNegocial implements
 
 	public static IdentificadorNegocial getInstancia(String valor) {
 
-		for (IdentificadorNegocial identificador : EnumSet
-				.allOf(IdentificadorNegocial.class)) {
-			if (identificador.getId().equals(valor))
+		EnumSet<IdentificadorNegocial> enumSet =EnumSet.allOf(IdentificadorNegocial.class);
+		for (IdentificadorNegocial identificador : enumSet) {
+			if (identificador.getId().contains(valor))
 				return identificador;
 		}
 		return null;

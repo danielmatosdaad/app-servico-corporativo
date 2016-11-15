@@ -8,6 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.bind.JAXBException;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import br.com.app.smart.business.dao.interfaces.IServicoRemoteDAO;
@@ -15,7 +16,10 @@ import br.com.app.smart.business.exception.InfraEstruturaException;
 import br.com.app.smart.business.exception.NegocioException;
 import br.com.app.smart.business.funcionalidade.dto.FuncionalidadeDTO;
 import br.com.app.smart.business.funcionalidade.dto.MetaDadoDTO;
+import br.com.metadado.conversor.ConversorMetadadoFacelet;
+import br.com.projeto.facelet.bean.Facelet;
 import br.com.projeto.metadado.bean.Componente;
+import br.com.projeto.metadado.bean.Conteudo;
 import br.com.projeto.metadado.bean.MetaDado;
 import br.com.projeto.metadado.bean.Propriedade;
 import br.com.projeto.metadado.infra.ProcessadorXml;
@@ -31,6 +35,11 @@ import br.com.projeto.metadado.infra.comum.TipoTransformacao;
 @Named
 public class RegrasMetadado implements IRegrasMetaDado {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Inject
 	private ProcessadorXml processadorXML;
 
@@ -40,7 +49,13 @@ public class RegrasMetadado implements IRegrasMetaDado {
 	@Inject
 	private IServicoRemoteDAO<MetaDadoDTO> metaDadoService;
 
-	private StringBufferOutputStream transformarMetadado(MetaDado metadado)
+	public RegrasMetadado() {
+		if (this.processadorXML == null) {
+			this.processadorXML = new ProcessadorXml();
+		}
+	}
+
+	public StringBufferOutputStream transformarMetadado(MetaDado metadado)
 			throws TransformerException, JAXBException, FileNotFoundException {
 
 		StringBufferOutputStream stream = this.processadorXML.processar(TipoProcessamento.TRASFORMAR_XML_OBJETO,
@@ -49,8 +64,7 @@ public class RegrasMetadado implements IRegrasMetaDado {
 		return stream;
 	}
 
-	public List<IdentificadorWrapper> obterIdComponente(int numeroTela, int funcionalidade,
-			PadraoIdentificador identificador, MetaDado metadado) {
+	public List<IdentificadorWrapper> obterIdComponente(PadraoIdentificador identificador, MetaDado metadado) {
 
 		FactoryIdentificador fabricaIdentificador = identificador.getFabricaIdentificador();
 
@@ -81,12 +95,12 @@ public class RegrasMetadado implements IRegrasMetaDado {
 	}
 
 	@Override
-	public MetadadoUI funcionalidadeMetadado(int numeroTela, int funcionalidade, MetaDado metadado) {
+	public MetadadoUI converterMetadadoUI(MetaDado metadado) {
 		// TODO Auto-generated method stub
-		List<IdentificadorWrapper> listaIdentificadores = obterIdComponente(numeroTela, funcionalidade,
+		List<IdentificadorWrapper> listaIdentificadores = obterIdComponente(
 				PadraoIdentificador.PADRAO_IDENTIFICADOR_NEGOCIAL, metadado);
 
-		List<IdentificadorWrapper> listaIdentificadoresBean = obterIdComponente(numeroTela, funcionalidade,
+		List<IdentificadorWrapper> listaIdentificadoresBean = obterIdComponente(
 				PadraoIdentificador.PADRAO_IDENTIFICADOR_BEAN, metadado);
 
 		MetadadoUI metadadoUI = new MetadadoUI();
@@ -156,20 +170,21 @@ public class RegrasMetadado implements IRegrasMetaDado {
 		return null;
 	}
 
-	public List<MetaDado> transformarFaceletsEmMetadados(List<File> lista) {
+	@Override
+	public List<Facelet> transformarEmFacelets(List<File> lista) {
 
-		List<MetaDado> metadados = new ArrayList<MetaDado>();
+		List<Facelet> facelets = new ArrayList<Facelet>();
 
 		if (lista != null) {
 
 			for (File xml : lista) {
 				try {
-					Object obj = this.processadorXML.transformar(MetaDado.class, xml);
-					if (obj instanceof MetaDado) {
+					Object obj = this.processadorXML.transformar(Facelet.class, xml);
+					if (obj instanceof Facelet) {
 
-						MetaDado mdo = (MetaDado) obj;
-						mdo.setNomeMetadado(xml.getName());
-						metadados.add(mdo);
+						Facelet facelet = (Facelet) obj;
+						facelet.setNomeMetadado(xml.getName());
+						facelets.add(facelet);
 					}
 				} catch (TransformerException e) {
 					e.printStackTrace();
@@ -178,9 +193,10 @@ public class RegrasMetadado implements IRegrasMetaDado {
 			}
 		}
 
-		return metadados;
+		return facelets;
 	}
 
+	@Override
 	public StringBuffer transformaParaXml(MetaDado metaDado) {
 
 		if (metaDado == null) {
@@ -192,6 +208,7 @@ public class RegrasMetadado implements IRegrasMetaDado {
 		return out.getBuffer();
 	}
 
+	@Override
 	public StringBuffer transformaMetaDadoParaFacelet(MetaDado metaDado) {
 		if (metaDado == null) {
 			StringBuffer sb = new StringBuffer();
@@ -199,6 +216,52 @@ public class RegrasMetadado implements IRegrasMetaDado {
 		}
 		StringBufferOutputStream out = this.processadorXML.processar(TipoProcessamento.TRASFORMAR_XML_OBJETO, metaDado);
 		return out.getBuffer();
+	}
+
+	@Override
+	public List<MetadadoUI> converterFaceletMetadadoUI(List<Facelet> lista)
+			throws TransformerConfigurationException, TransformerException {
+
+		List<MetadadoUI> listaMetadadoUI = new ArrayList<MetadadoUI>();
+
+		for (Facelet facelet : lista) {
+
+			MetadadoUI metaDadoUI = converterFaceletMetadadoUI(facelet);
+			listaMetadadoUI.add(metaDadoUI);
+		}
+
+		return listaMetadadoUI;
+	}
+
+	public MetadadoUI converterFaceletMetadadoUI(Facelet facelet)
+			throws TransformerConfigurationException, TransformerException {
+
+		MetaDado metaDado = ConversorMetadadoFacelet.converter(facelet);
+		MetadadoUI metaDadoUI = converterMetadadoUI(metaDado);
+
+		return metaDadoUI;
+	}
+
+	public MetaDado converterFaceletMetaDado(List<Facelet> faceletes) {
+		StringBuffer sb = new StringBuffer();
+
+		ArrayList<Componente> componentes = new ArrayList<Componente>();
+		Conteudo conteudo = new Conteudo(componentes);
+		conteudo.setNomeConteudo("html");
+		MetaDado metadado = new MetaDado(conteudo);
+
+		try {
+			for (Facelet facelet : faceletes) {
+				MetaDado mdo = ConversorMetadadoFacelet.converter(facelet);
+				metadado.getConteudo().getComponentes().addAll(mdo.getConteudo().getComponentes());
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Resultado: " + sb.toString());
+		return metadado;
 	}
 
 }
