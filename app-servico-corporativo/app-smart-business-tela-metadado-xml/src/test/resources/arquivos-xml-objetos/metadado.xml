@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<metadado>
+	<componente nameSpace="http://url.projeto/componentes" nomeComponente="botao-padrao">
+		<propriedade>
+			<nome>idbotao</nome>
+			<valor></valor>
+			</propriedade>
+			<propriedade>
+				<nome>nomebotao</nome>
+				<valor></valor>
+			</propriedade>
+			<propriedade>
+				<nome>acao</nome>
+				<valor></valor>
+			</propriedade>
+			<propriedade>
+				<nome>fluxo</nome>
+				<valor></valor>
+			</propriedade>
+			<propriedade><nome>numerotela</nome>
+				<valor></valor>
+		</propriedade>
+		<propriedade>
+			<nome>numerofuncionalidade</nome>
+			<valor></valor>
+		</propriedade>
+		<propriedade>
+			<nome>renderizar</nome>
+			<valor></valor>
+		</propriedade>
+	</componente>
+</metadado>

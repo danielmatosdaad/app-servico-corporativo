@@ -23,10 +23,7 @@ import br.com.projeto.metadado.bean.Conteudo;
 import br.com.projeto.metadado.bean.MetaDado;
 import br.com.projeto.metadado.bean.Propriedade;
 import br.com.projeto.metadado.infra.ProcessadorXml;
-import br.com.projeto.metadado.infra.comum.FactoryIdentificador;
 import br.com.projeto.metadado.infra.comum.Identificador;
-import br.com.projeto.metadado.infra.comum.IdentificadorWrapper;
-import br.com.projeto.metadado.infra.comum.MetadadoUI;
 import br.com.projeto.metadado.infra.comum.PadraoIdentificador;
 import br.com.projeto.metadado.infra.comum.StringBufferOutputStream;
 import br.com.projeto.metadado.infra.comum.TipoProcessamento;
@@ -64,62 +61,23 @@ public class RegrasMetadado implements IRegrasMetaDado {
 		return stream;
 	}
 
-	public List<IdentificadorWrapper> obterIdComponente(PadraoIdentificador identificador, MetaDado metadado) {
-
-		FactoryIdentificador fabricaIdentificador = identificador.getFabricaIdentificador();
-
-		List<Componente> componenetes = metadado.getConteudo().getComponentes();
-		List<IdentificadorWrapper> listaId = new ArrayList<IdentificadorWrapper>();
-
-		for (Componente componente : componenetes) {
-
-			List<Propriedade> propriedades = componente.getPropriedades();
-			for (Propriedade propriedade : propriedades) {
-
-				if (propriedade.getNome().contains(fabricaIdentificador.getIdentificadorPadrao().getValor())) {
-
-					System.out.println("Valor do identificador: " + propriedade.getValor());
-					Identificador id = fabricaIdentificador.getInstancia(fabricaIdentificador, propriedade.getValor());
-					IdentificadorWrapper wrapper = new IdentificadorWrapper<Identificador>(id);
-
-					if (id != null) {
-						listaId.add(wrapper);
-					}
-				}
-
-			}
-
-		}
-
-		return listaId;
-	}
-
 	@Override
-	public MetadadoUI converterMetadadoUI(MetaDado metadado) {
-		// TODO Auto-generated method stub
-		List<IdentificadorWrapper> listaIdentificadores = obterIdComponente(
-				PadraoIdentificador.PADRAO_IDENTIFICADOR_NEGOCIAL, metadado);
+	public String converterMetadado(MetaDado metadado) {
 
-		List<IdentificadorWrapper> listaIdentificadoresBean = obterIdComponente(
-				PadraoIdentificador.PADRAO_IDENTIFICADOR_BEAN, metadado);
-
-		MetadadoUI metadadoUI = new MetadadoUI();
-		metadadoUI.setIdentificadoreNegocialMetadados(listaIdentificadores);
-		metadadoUI.setIdentificadoreBeanMetadados(listaIdentificadoresBean);
 		try {
-			metadadoUI.setMetadado(transformarMetadado(metadado));
+			StringBufferOutputStream sb = transformarMetadado(metadado);
+			return sb.getBuffer().toString();
 		} catch (FileNotFoundException | TransformerException | JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return metadadoUI;
+		return "";
 	}
 
 	@Override
-	public MetaDado buscarMetadado(int numeroTela, int funcionalidade)
+	public MetaDadoDTO buscarMetadado(int numeroTela, int funcionalidade)
 			throws InfraEstruturaException, NegocioException {
-		// TODO Auto-generated method stub
 
 		FuncionalidadeDTO funcionalidadeDTO = this.funcionalidadeService.bustarPorID(Long.valueOf(funcionalidade));
 		String metadado = null;
@@ -129,22 +87,16 @@ public class RegrasMetadado implements IRegrasMetaDado {
 
 			if (mdo.getNumeroTela() == numeroTela) {
 
-				metadado = mdo.getXml();
-
-				if (metadado != null) {
-
-					return (MetaDado) this.processadorXML.transformar(TipoTransformacao.TRASFORMAR_XML_OBJETO,
-							metadado);
-				}
+				return mdo;
 
 			}
 		}
 
-		return metadadoProcessado;
+		return null;
 	}
 
 	@Override
-	public MetadadoUI atualizarTela(long idMetaDado) throws InfraEstruturaException, NegocioException {
+	public MetaDadoDTO atualizarTela(long idMetaDado) throws InfraEstruturaException, NegocioException {
 		MetaDadoDTO metadadoDTO = metaDadoService.bustarPorID(idMetaDado);
 
 		String metadado = metadadoDTO.getXml();
@@ -159,7 +111,6 @@ public class RegrasMetadado implements IRegrasMetaDado {
 				if (out != null) {
 					metadadoDTO.setXhtml(out.getBuffer().toString());
 					metadadoDTO = metaDadoService.alterar(metadadoDTO);
-					System.out.println("Tela Atualizada:");
 					System.out.println("Tela Atualizada:" + metadadoDTO.getXhtml());
 				}
 			} catch (FileNotFoundException | TransformerException | JAXBException e) {
@@ -167,7 +118,7 @@ public class RegrasMetadado implements IRegrasMetaDado {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return metadadoDTO;
 	}
 
 	@Override
@@ -219,26 +170,25 @@ public class RegrasMetadado implements IRegrasMetaDado {
 	}
 
 	@Override
-	public List<MetadadoUI> converterFaceletMetadadoUI(List<Facelet> lista)
+	public List<String> converterFaceletMetadadoUI(List<Facelet> lista)
 			throws TransformerConfigurationException, TransformerException {
 
-		List<MetadadoUI> listaMetadadoUI = new ArrayList<MetadadoUI>();
+		List<String> listaMetadadoUI = new ArrayList<String>();
 
 		for (Facelet facelet : lista) {
 
-			MetadadoUI metaDadoUI = converterFaceletMetadadoUI(facelet);
+			String metaDadoUI = converterFaceletMetadadoUI(facelet);
 			listaMetadadoUI.add(metaDadoUI);
 		}
 
 		return listaMetadadoUI;
 	}
 
-	public MetadadoUI converterFaceletMetadadoUI(Facelet facelet)
+	public String converterFaceletMetadadoUI(Facelet facelet)
 			throws TransformerConfigurationException, TransformerException {
 
 		MetaDado metaDado = ConversorMetadadoFacelet.converter(facelet);
-		MetadadoUI metaDadoUI = converterMetadadoUI(metaDado);
-
+		String metaDadoUI = converterMetadado(metaDado);
 		return metaDadoUI;
 	}
 
@@ -262,6 +212,17 @@ public class RegrasMetadado implements IRegrasMetaDado {
 		}
 		System.out.println("Resultado: " + sb.toString());
 		return metadado;
+	}
+
+	@Override
+	public MetaDado converterMetaDado(MetaDadoDTO metaDadoDTO) {
+		
+		if (metaDadoDTO == null || (metaDadoDTO.getXml() == null || metaDadoDTO.getXml().isEmpty())) {
+
+			return null;
+		}
+		return (MetaDado) this.processadorXML.transformar(TipoTransformacao.TRASFORMAR_XML_OBJETO,
+				metaDadoDTO.getXml());
 	}
 
 }

@@ -2,6 +2,7 @@ package br.com.app.smart.business.funcionalidade.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import br.com.app.smart.business.dto.DTO;
 
@@ -17,6 +18,8 @@ public class IdentificadorDTO implements DTO, Serializable {
 	private Date dataInclusao;
 	private Date dataAlteracao;
 	private TipoIdentificadorDTO tipoIdentificador;
+
+	private List<MetaDadoDTO> metadados;
 
 	public Long getId() {
 		return id;
@@ -65,6 +68,14 @@ public class IdentificadorDTO implements DTO, Serializable {
 
 	public void setTipoIdentificador(TipoIdentificadorDTO tipoIdentificador) {
 		this.tipoIdentificador = tipoIdentificador;
+	}
+
+	public List<MetaDadoDTO> getMetadados() {
+		return metadados;
+	}
+
+	public void setMetadados(List<MetaDadoDTO> metadados) {
+		this.metadados = metadados;
 	}
 
 }

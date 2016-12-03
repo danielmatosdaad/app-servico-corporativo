@@ -1,6 +1,7 @@
 package br.com.app.smart.business.funcionalidade.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 import br.com.app.smart.business.dto.DTO;
 import br.com.app.smart.business.dto.RegistroAuditoriaDTO;
@@ -31,6 +32,8 @@ public class MetaDadoDTO implements Comparable<MetaDadoDTO>, DTO, Serializable {
 	private String xhtml;
 
 	private FuncionalidadeDTO funcionalidade;
+
+	private List<IdentificadorDTO> identificadores;
 
 	private RegistroAuditoriaDTO registroAuditoria;
 
@@ -112,6 +115,14 @@ public class MetaDadoDTO implements Comparable<MetaDadoDTO>, DTO, Serializable {
 
 	public void setUrlTela(String urlTela) {
 		this.urlTela = urlTela;
+	}
+
+	public List<IdentificadorDTO> getIdentificadores() {
+		return identificadores;
+	}
+
+	public void setIdentificadores(List<IdentificadorDTO> identificadores) {
+		this.identificadores = identificadores;
 	}
 
 	@Override

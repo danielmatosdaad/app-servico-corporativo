@@ -23,6 +23,7 @@ import br.com.app.smart.business.funcionalidade.dto.GrupoFuncionalidadeDTO;
 import br.com.app.smart.business.funcionalidade.dto.IdentificadorDTO;
 import br.com.app.smart.business.funcionalidade.dto.MetaDadoDTO;
 import br.com.app.smart.business.funcionalidade.dto.PerfilDTO;
+import br.com.app.smart.business.interfaces.ComponenteTelaService;
 import br.com.app.smart.business.parametro.dto.ParametroDTO;
 import br.com.app.smart.business.usuario.dto.SenhaDTO;
 import br.com.app.smart.business.usuario.dto.UsuarioDTO;
@@ -68,6 +69,10 @@ public class RemoteServiceProvider implements Serializable {
 
 	@EJB(lookup = "java:global/app-corporativo/app-smart-business-fnc-mdo/IdentificadorServiceImp!br.com.app.smart.business.dao.interfaces.IServicoRemoteDAO", beanName = "IdentificadorServiceImp", beanInterface = IServicoRemoteDAO.class)
 	private IServicoRemoteDAO<IdentificadorDTO> identificadorService;
+	
+	@EJB(lookup = "java:global/app-corporativo/app-smart-business-tela-metadado-xml/ComponenteTelaServiceImp!br.com.app.smart.business.interfaces.ComponenteTelaService", beanName = "ComponenteTelaServiceImp", beanInterface = ComponenteTelaService.class)
+	private ComponenteTelaService componenteTelaService;
+	
 	
 	@Default
 	@Produces
@@ -135,6 +140,14 @@ public class RemoteServiceProvider implements Serializable {
 	@Produces
 	public IServicoRemoteDAO<IdentificadorDTO> getIdentificadorService() {
 		return identificadorService;
+	}
+	
+	
+	@Default
+	@Produces
+	public ComponenteTelaService getComponenteTelaService() {
+		System.out.println("Injetando Servico componenteTelaService");
+		return componenteTelaService;
 	}
 
 	/**

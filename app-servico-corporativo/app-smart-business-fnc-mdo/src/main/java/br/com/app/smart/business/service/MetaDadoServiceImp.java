@@ -13,6 +13,7 @@ import br.com.app.smart.business.dao.interfaces.IServicoLocalDAO;
 import br.com.app.smart.business.dao.interfaces.IServicoRemoteDAO;
 import br.com.app.smart.business.exception.InfraEstruturaException;
 import br.com.app.smart.business.exception.NegocioException;
+import br.com.app.smart.business.funcionalidade.dto.IdentificadorDTO;
 import br.com.app.smart.business.funcionalidade.dto.MetaDadoDTO;
 import br.com.app.smart.business.model.MetaDado;
 
@@ -23,6 +24,9 @@ public class MetaDadoServiceImp implements IServicoRemoteDAO<MetaDadoDTO>, IServ
 
 	@EJB
 	private MetaDadoFacade metaDadoFacade;
+	
+	@EJB(lookup = "java:global/app-corporativo/app-smart-business-fnc-mdo/IdentificadorServiceImp!br.com.app.smart.business.dao.interfaces.IServicoRemoteDAO", beanName = "IdentificadorServiceImp", beanInterface = IServicoRemoteDAO.class)
+	private IServicoRemoteDAO<IdentificadorDTO> identificadorService;
 
 	@Override
 	public MetaDadoDTO adiconar(MetaDadoDTO dto) throws InfraEstruturaException, NegocioException {

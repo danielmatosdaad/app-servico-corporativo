@@ -11,30 +11,33 @@ import javax.xml.transform.TransformerException;
 
 import br.com.app.smart.business.exception.InfraEstruturaException;
 import br.com.app.smart.business.exception.NegocioException;
+import br.com.app.smart.business.funcionalidade.dto.MetaDadoDTO;
 import br.com.projeto.facelet.bean.Facelet;
 import br.com.projeto.metadado.bean.MetaDado;
-import br.com.projeto.metadado.infra.comum.MetadadoUI;
 import br.com.projeto.metadado.infra.comum.StringBufferOutputStream;
 
-public interface IRegrasMetaDado extends Serializable{
+public interface IRegrasMetaDado extends Serializable {
 
-	public MetadadoUI converterMetadadoUI(MetaDado metadado);
+	public String converterMetadado(MetaDado metadado);
 
-	public MetaDado buscarMetadado(int numeroTela, int funcionalidade) throws InfraEstruturaException, NegocioException;
+	public MetaDadoDTO buscarMetadado(int numeroTela, int funcionalidade)
+			throws InfraEstruturaException, NegocioException;
 
-	public MetadadoUI atualizarTela(long idMetaDado) throws InfraEstruturaException, NegocioException;
+	public MetaDadoDTO atualizarTela(long idMetaDado) throws InfraEstruturaException, NegocioException;
 
 	public StringBuffer transformaParaXml(MetaDado metaDado);
 
 	public StringBuffer transformaMetaDadoParaFacelet(MetaDado metaDado);
 
-	public List<MetadadoUI> converterFaceletMetadadoUI(List<Facelet> lista)
+	public List<String> converterFaceletMetadadoUI(List<Facelet> lista)
 			throws TransformerConfigurationException, TransformerException;
 
 	public List<Facelet> transformarEmFacelets(List<File> lista);
 
 	public StringBufferOutputStream transformarMetadado(MetaDado metadado)
 			throws TransformerException, JAXBException, FileNotFoundException;
-	
+
 	public MetaDado converterFaceletMetaDado(List<Facelet> faceletes);
+
+	public MetaDado converterMetaDado(MetaDadoDTO metaDadoDTO);
 }

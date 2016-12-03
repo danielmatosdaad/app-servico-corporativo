@@ -1,11 +1,14 @@
 package br.com.app.smart.business.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -23,36 +26,39 @@ public class MetaDado implements Entidade, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private int numeroTela;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private String nomeTela;
 
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String tituloTela;
 
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String descricaoTela;
 
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String urlTela;
-	
+
 	private Long versao;
-	
-	@Column(length=3000,nullable=false)
+
+	@Column(length = 3000, nullable = false)
 	private String xml;
-	
-	@Column(length=3000)
+
+	@Column(length = 3000)
 	private String xhtml;
 
 	private RegistroAuditoria registroAuditoria;
 
 	@ManyToOne
 	private Funcionalidade funcionalidade;
+
+	@ManyToMany
+	private List<Identificador> identificadores;
 
 	public Long getId() {
 		return id;
@@ -141,7 +147,13 @@ public class MetaDado implements Entidade, Serializable {
 	public void setFuncionalidade(Funcionalidade funcionalidade) {
 		this.funcionalidade = funcionalidade;
 	}
-	
-	
+
+	public List<Identificador> getIdentificadores() {
+		return identificadores;
+	}
+
+	public void setIdentificadores(List<Identificador> identificadores) {
+		this.identificadores = identificadores;
+	}
 
 }

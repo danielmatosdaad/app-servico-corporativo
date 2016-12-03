@@ -15,6 +15,8 @@ public class Facelet implements Serializable {
 
 	private String nomeMetadado;
 
+	private String icon;
+
 	private ConteudoFacelet conteudo;
 
 	public Facelet() {
@@ -42,6 +44,14 @@ public class Facelet implements Serializable {
 
 	public void setNomeMetadado(String nomeMetadado) {
 		this.nomeMetadado = nomeMetadado;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
 }

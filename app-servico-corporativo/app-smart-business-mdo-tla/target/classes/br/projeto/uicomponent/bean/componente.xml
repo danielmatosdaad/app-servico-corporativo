@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<componente xmlns:tns="http://www.projeto.com.br/metadado/bean"
+	xmlns:projeto="http://url.projeto/componentes" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	nomeComponente="html">
+	<componente nomeComponente="ui:composition">
+		<componente nomeComponente="h:commandButton">
+			<propriedade>
+				<nome>id</nome>
+				<valor>#{idTelaBotaoVarUI}</valor>
+			</propriedade>
+			<propriedade>
+				<nome>actionListener</nome>
+				<valor>#{componenteMB.processAction}</valor>
+			</propriedade>
+			<propriedade>
+				<nome>action</nome>
+				<valor>#{componenteMB.process}</valor>
+			</propriedade>
+			<propriedade>
+				<nome>value</nome>
+				<valor>#{nomeBotaoVarUI}</valor>
+			</propriedade>
+
+			<componente nomeComponente="f:attribute">
+				<propriedade>
+					<nome>name</nome>
+					<valor>acaoRequisicao</valor>
+				</propriedade>
+				<propriedade>
+					<nome>value</nome>
+					<valor>#{acaoRequisicaoVarUI}</valor>
+				</propriedade>
+			</componente>
+			<componente nomeComponente="f:attribute">
+				<propriedade>
+					<nome>name</nome>
+					<valor>acaoFluxo</valor>
+				</propriedade>
+				<propriedade>
+					<nome>value</nome>
+					<valor>#{acaoFluxoVarUI}</valor>
+				</propriedade>
+			</componente>
+			<componente nomeComponente="f:attribute">
+				<propriedade>
+					<nome>name</nome>
+					<valor>numeroTela</valor>
+				</propriedade>
+				<propriedade>
+					<nome>value</nome>
+					<valor>#{numeroTelaVarUI}</valor>
+				</propriedade>
+			</componente>
+			<componente nomeComponente="f:attribute">
+				<propriedade>
+					<nome>name</nome>
+					<valor>numeroFuncionalidadeComponenteTela</valor>
+				</propriedade>
+				<propriedade>
+					<nome>value</nome>
+					<valor>#{numeroFuncionalidadeVarUI}</valor>
+				</propriedade>
+			</componente>
+		</componente>
+	</componente>
+</componente>

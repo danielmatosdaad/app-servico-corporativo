@@ -5,7 +5,11 @@ import java.util.Set;
 
 public enum TipoIdentificador {
 
-	NEGOCIAL(1, "Negocial"), BEAN(2, "Bean"), COMPONENTE_TELA(3, "ComponenteTela"), INDEFINIDO(-1, "Indefinido");
+	NEGOCIAL(1, "Negocial"), 
+	BEAN(2, "Bean"), 
+	COMPONENTE_TELA(3, "ComponenteTela"), 
+	VARIAVEL_UI(4,"VarUI"),
+	INDEFINIDO(-1, "Indefinido");
 
 	private int value;
 	private String texto;

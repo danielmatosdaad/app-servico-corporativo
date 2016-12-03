@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<componente xmlns:tns="http://www.projeto.com.br/metadado/bean"
+	xmlns:projeto="http://url.projeto/componentes" xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="ht
+tp://xmlns.jcp.org/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite" nomeComponente="ui:composition">
+
+	<componente nomeComponente="cc:interface">
+		<propriedade>
+			<nome>name</nome>
+			<valor>botao-padrao</valor>
+		</propriedade>
+		<propriedade>
+			<nome>displayName</nome>
+			<valor>botao-padrao</valor>
+		</propriedade>
+		<propriedade>
+			<nome>shortDescription</nome>
+			<valor>Botao padrao sem requsicao ajax.</valor>
+		</propriedade>
+		<componente nomeComponente="cc:attribute">
+			<propriedade>
+				<nome>name</nome>
+				<valor>idbotao</valor>
+			</propriedade>
+		</componente>
+		<componente nomeComponente="cc:attribute">
+			<propriedade>
+				<nome>name</nome>
+				<valor>nomebotao</valor>
+			</propriedade>
+		</componente>
+		<componente nomeComponente="cc:attribute">
+			<propriedade>
+				<nome>name</nome>
+				<valor>acao</valor>
+			</propriedade>
+		</componente>
+		<componente nomeComponente="cc:attribute">
+			<propriedade>
+				<nome>name</nome>
+				<valor>fluxo</valor>
+			</propriedade>
+		</componente>
+		<componente nomeComponente="cc:attribute">
+			<propriedade>
+				<nome>name</nome>
+				<valor>numerotela</valor>
+			</propriedade>
+		</componente>
+		<componente nomeComponente="cc:attribute">
+			<propriedade>
+				<nome>name</nome>
+				<valor>numerofuncionalidade</valor>
+			</propriedade>
+		</componente>
+		<componente nomeComponente="cc:attribute">
+			<propriedade>
+				<nome>name</nome>
+				<valor>renderizar</valor>
+			</propriedade>
+		</componente>
+	</componente>
+
+	<componente nomeComponente="cc:implementation">
+
+		<componente nomeComponente="div">
+			<propriedade>
+				<nome>class</nome>
+				<valor>botao-padrao</valor>
+			</propriedade>
+			<propriedade>
+				<nome>jsf:rendered</nome>
+				<valor>#{cc.renderizar}</valor>
+			</propriedade>
+			<componente nomeComponente="p:commandButton">
+				<propriedade>
+					<nome>id</nome>
+					<valor>#{cc.idbotao}</valor>
+				</propriedade>
+				<propriedade>
+					<nome>actionListener</nome>
+					<valor>#{componenteMB.processAction}</valor>
+				</propriedade>
+				<propriedade>
+					<nome>action</nome>
+					<valor>#{componenteMB.process}</valor>
+				</propriedade>
+				<propriedade>
+					<nome>value</nome>
+					<valor>#{cc.nomebotao}</valor>
+				</propriedade>
+
+				<componente nomeComponente="f:attribute">
+					<propriedade>
+						<nome>name</nome>
+						<valor>acao</valor>
+					</propriedade>
+					<propriedade>
+						<nome>value</nome>
+						<valor>#{cc.acao}</valor>
+					</propriedade>
+				</componente>
+				<componente nomeComponente="f:attribute">
+					<propriedade>
+						<nome>name</nome>
+						<valor>fluxo</valor>
+					</propriedade>
+					<propriedade>
+						<nome>value</nome>
+						<valor>#{cc.fluxo}</valor>
+					</propriedade>
+				</componente>
+				<componente nomeComponente="f:attribute">
+					<propriedade>
+						<nome>name</nome>
+						<valor>numeroTela</valor>
+					</propriedade>
+					<propriedade>
+						<nome>value</nome>
+						<valor>#{cc.numerotela}</valor>
+					</propriedade>
+				</componente>
+				<componente nomeComponente="f:attribute">
+					<propriedade>
+						<nome>name</nome>
+						<valor>numeroFuncionalidade</valor>
+					</propriedade>
+					<propriedade>
+						<nome>value</nome>
+						<valor>#{cc.numerofuncionalidade}</valor>
+					</propriedade>
+				</componente>
+			</componente>
+		</componente>
+
+	</componente>
+</componente>

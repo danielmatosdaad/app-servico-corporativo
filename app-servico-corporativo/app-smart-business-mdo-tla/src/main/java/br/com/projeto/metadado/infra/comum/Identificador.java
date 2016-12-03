@@ -1,9 +1,8 @@
 package br.com.projeto.metadado.infra.comum;
 
-public interface Identificador<T> {
+public interface Identificador {
 
 	
 	public String getId();
-	public boolean isValorNegocial();
-	
+	public String getValor();
 }

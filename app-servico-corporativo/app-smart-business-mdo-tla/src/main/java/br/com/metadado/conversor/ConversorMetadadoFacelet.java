@@ -24,10 +24,9 @@ public class ConversorMetadadoFacelet {
 			for (PropriedadeComponenteFacelet propriedadeComponenteFacelet : componenteFacelet.getPropriedades()) {
 				Propriedade prop = new Propriedade();
 
-				if (propriedadeComponenteFacelet.getValor().contains("Negocial")
-						|| propriedadeComponenteFacelet.getValor().contains("Bean")) {
+				if (UiComponentUtil.isVariavelUiComponent(propriedadeComponenteFacelet.getValor())) {
 
-					String id = propriedadeComponenteFacelet.getValor().replaceAll("\\#\\{", "").replace("}", "");
+					String id = UiComponentUtil.retirarExpressaoEL(propriedadeComponenteFacelet.getValor());
 					prop.setNome(id);
 					prop.setValor(id);
 					propriedades.add(prop);
@@ -48,6 +47,7 @@ public class ConversorMetadadoFacelet {
 		return metadado;
 
 	}
+
 
 	public static Facelet converter(MetaDado metadado) {
 

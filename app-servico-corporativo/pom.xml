@@ -65,10 +65,9 @@
 		<module>app-smart-business-fnc-mdo</module>
 		<module>app-smart-business-infra-persistencia</module>
 		<module>app-smart-business-infra-servico</module>
-		<module>app-smart-business-mdo-tla</module>
 		<module>app-smart-business-pmt</module>
 		<module>app-smart-business-usr</module>
-
+		<module>app-smart-business-tela-metadado-xml</module>
 	</modules>
 
 	<dependencyManagement>
