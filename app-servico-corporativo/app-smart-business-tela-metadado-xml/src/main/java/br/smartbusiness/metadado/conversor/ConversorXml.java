@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
@@ -17,23 +18,27 @@ public class ConversorXml<S> implements Conversor<S> {
 
 	private TipoConversaoXML tipoConversao;
 
-	
 	public ConversorXml(InputStream input) {
 
 		this.contexto = new ContextoJAXB(input, InputStream.class);
 		this.tipoConversao = TipoConversaoXML.INPUTSTREAM_STRING_INTANCIA;
 	}
-	
+
 	public ConversorXml(String input) {
 
 		this.contexto = new ContextoJAXB(input, String.class);
 		this.tipoConversao = TipoConversaoXML.STRING_INTANCIA;
 	}
-	
-	public ConversorXml(Object input, Class cast,TipoConversaoXML tipoConversao) {
+
+	public ConversorXml(Object input, Class cast, TipoConversaoXML tipoConversao) {
 
 		this.contexto = new ContextoJAXB(input, cast);
 		this.tipoConversao = tipoConversao;
+	}
+
+	private Marshaller getMarshaller() throws JAXBException {
+
+		return this.contexto.getContextosJAXB().createMarshaller();
 	}
 
 	private Unmarshaller getUnmarshaller() throws JAXBException {
@@ -55,10 +60,22 @@ public class ConversorXml<S> implements Conversor<S> {
 			return converteStreamParaStringBuffer();
 		case INPUTSTREAM_STRING_INTANCIA:
 			return converterStreamParaInstancia();
-
+		case INSTANCIA_STRING_BUFFER:
+			return converterInstanciaParaStringBuffer();
 		}
 		return null;
 
+	}
+
+	private S converterInstanciaParaStringBuffer() {
+		StringBufferOutputStream fluxoSaida = new StringBufferOutputStream();
+		try {
+			getMarshaller().marshal(this.contexto.getInstancia(), fluxoSaida);
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return (S) fluxoSaida.getBuffer();
 	}
 
 	public S converteStreamParaStringBuffer() {

@@ -1,4 +1,4 @@
-package br.com.app.smart.business.tela.componete.dto;
+package br.com.app.smart.business.tela.componente.dto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,6 +14,8 @@ public class ComponenteDTO implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	private int identificador;
 
 	private String nameSpace;
 
@@ -87,5 +89,12 @@ public class ComponenteDTO implements Serializable {
 		return nameSpace;
 	}
 
+	public int getIdentificador() {
+		return identificador;
+	}
+
+	public void setIdentificador(int identificador) {
+		this.identificador = identificador;
+	}
 
 }

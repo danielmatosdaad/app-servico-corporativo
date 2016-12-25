@@ -1,4 +1,4 @@
-package br.com.app.smart.business.tela.componete.dto;
+package br.com.app.smart.business.tela.componente.dto;
 
 import java.io.Serializable;
 import java.util.Map;

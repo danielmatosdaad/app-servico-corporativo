@@ -1,4 +1,4 @@
-package br.com.app.smart.business.tela.componete.dto;
+package br.com.app.smart.business.tela.componente.dto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,6 +12,7 @@ public class ComponenteTelaDTO implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 
 	private String nomeMetadado;
 
@@ -40,5 +41,6 @@ public class ComponenteTelaDTO implements Serializable {
 	public void setNomeMetadado(String nomeMetadado) {
 		this.nomeMetadado = nomeMetadado;
 	}
+
 
 }

@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -18,12 +20,19 @@ import br.com.app.smart.business.dao.interfaces.Entidade;
 @Entity(name = "metadado")
 @Table(name = "metadado")
 @XmlRootElement
+
+@NamedQueries({
+    @NamedQuery(name = MetaDado.BUSCAR_POR_NUMEROTELA_FUNCIONALIDADE,
+                query = "select m from metadado m WHERE m.numeroTela = :numTela and m.funcionalidade.id= :idFun")
+})
 public class MetaDado implements Entidade, Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	public static final String BUSCAR_POR_NUMEROTELA_FUNCIONALIDADE = "buscarPorNumeroTelaFuncionalidade";
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

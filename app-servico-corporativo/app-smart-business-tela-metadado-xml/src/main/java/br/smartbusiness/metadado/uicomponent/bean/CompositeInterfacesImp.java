@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.inject.Named;
 
-import br.com.app.smart.business.tela.componete.dto.ComponenteDTO;
+import br.com.app.smart.business.tela.componente.dto.ComponenteDTO;
 
 @Named
 public class CompositeInterfacesImp implements ICompositeInterfaces {

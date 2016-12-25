@@ -4,28 +4,38 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import br.appsmartbusiness.persistencia.conversores.Conversor;
 import br.com.app.smart.business.exception.InfraEstruturaException;
-import br.com.app.smart.business.interfaces.ComponenteTelaService;
-import br.com.app.smart.business.tela.componete.dto.ComponenteDTO;
-import br.com.app.smart.business.tela.componete.dto.ComponenteTelaDTO;
-import br.com.app.smart.business.tela.componete.dto.CompositeDTO;
+import br.com.app.smart.business.interfaces.IComponenteTelaService;
+import br.com.app.smart.business.processoconfiguracao.dto.ResultadoConvercaoComponenteUI;
+import br.com.app.smart.business.tela.componente.dto.ComponenteDTO;
+import br.com.app.smart.business.tela.componente.dto.ComponenteTelaDTO;
+import br.com.app.smart.business.tela.componente.dto.CompositeDTO;
+import br.com.app.smart.business.tela.componente.dto.CompositeInterfaceDTO;
 import br.smartbusiness.metadado.conversor.ConversorBean;
-import br.smartbusiness.metadado.servico.interfaces.ComponenteService;
-import br.smartbusiness.metadado.uicomponent.bean.CompositeImp;
+import br.smartbusiness.metadado.servico.interfaces.IComponenteServiceLocal;
 import br.smartbusiness.metadado.uicomponent.bean.IComposite;
+import br.smartbusiness.metadado.uicomponent.bean.ICompositeInterfaces;
 import br.smartbusiness.metadado.uicomponent.bean.MetaDado;
-@Stateless
-@Remote(ComponenteTelaService.class)
-public class ComponenteTelaServiceImp implements ComponenteTelaService {
 
-	@EJB
-	private ComponenteService componenteService;;
-	
+@Stateless
+@Remote(IComponenteTelaService.class)
+public class ComponenteTelaServiceImp implements IComponenteTelaService {
+
+	@EJB(beanName = "ComponenteServiceImp", beanInterface = IComponenteServiceLocal.class)
+	private IComponenteServiceLocal componenteService;
+
+	@PostConstruct
+	public void init() {
+
+		System.out.println("Injetando IComponenteServiceLocal: " + componenteService);
+	}
 
 	@Override
 	public List<CompositeDTO> converterArquivo(List<File> files) {
@@ -36,7 +46,7 @@ public class ComponenteTelaServiceImp implements ComponenteTelaService {
 			List<IComposite> listacomposites = componenteService.converterArquivo(files);
 			for (IComposite iComposite : listacomposites) {
 
-				CompositeDTO componenteDTO =ConversorBean.converterICompositeParaCompositeDTO(iComposite);
+				CompositeDTO componenteDTO = ConversorBean.converterICompositeParaCompositeDTO(iComposite);
 				compositesDTO.add(componenteDTO);
 			}
 			return compositesDTO;
@@ -44,6 +54,40 @@ public class ComponenteTelaServiceImp implements ComponenteTelaService {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public List<ComponenteTelaDTO> converterCompositeInterfaces(List<CompositeInterfaceDTO> compositeInterfaceDTOs)
+			throws InfraEstruturaException {
+
+		if (compositeInterfaceDTOs == null) {
+			return null;
+		}
+		List<ICompositeInterfaces> compositeInterfacesDTOS = new ArrayList<ICompositeInterfaces>();
+		for (CompositeInterfaceDTO compositeInterfaceDTO : compositeInterfaceDTOs) {
+
+			ICompositeInterfaces compositeInterfaces = ConversorBean
+					.converterCompositeInterfacesDTO(compositeInterfaceDTO);
+			compositeInterfacesDTOS.add(compositeInterfaces);
+		}
+
+		List<MetaDado> metadados = componenteService.converterCompositeInterfaces(compositeInterfacesDTOS);
+
+		List<ComponenteTelaDTO> listeComponenteTelaDTO = new ArrayList<ComponenteTelaDTO>();
+		int identificador = 0;
+		for (MetaDado metaDado : metadados) {
+
+			ComponenteTelaDTO componenteTelaDTO = Conversor.converter(metaDado, ComponenteTelaDTO.class);
+
+			for (ComponenteDTO cnp : componenteTelaDTO.getComponentes()) {
+
+				cnp.setIdentificador(++identificador);
+			}
+
+			listeComponenteTelaDTO.add(componenteTelaDTO);
+		}
+
+		return listeComponenteTelaDTO;
 	}
 
 	@Override
@@ -80,7 +124,7 @@ public class ComponenteTelaServiceImp implements ComponenteTelaService {
 	}
 
 	@Override
-	public List<StringBuffer> converterComponenteUI(List<ComponenteTelaDTO> metadados) {
+	public ResultadoConvercaoComponenteUI converterComponenteUI(List<ComponenteTelaDTO> metadados) {
 
 		try {
 
@@ -90,8 +134,10 @@ public class ComponenteTelaServiceImp implements ComponenteTelaService {
 				MetaDado MetaDado = Conversor.converter(componenteDTO, MetaDado.class);
 				listeMetaDado.add(MetaDado);
 			}
-
-			return componenteService.converterComponenteUI(listeMetaDado);
+			ResultadoConvercaoComponenteUI resultado = new ResultadoConvercaoComponenteUI();
+			resultado.setComponeteXhtml(componenteService.converterComponenteUI(listeMetaDado));
+			resultado.setComponenteXml(componenteService.converterEmXml(listeMetaDado));
+			return resultado;
 		} catch (Exception e) {
 
 			e.printStackTrace();

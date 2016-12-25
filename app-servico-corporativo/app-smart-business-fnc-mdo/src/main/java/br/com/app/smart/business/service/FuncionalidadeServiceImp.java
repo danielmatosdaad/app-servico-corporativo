@@ -15,13 +15,14 @@ import br.com.app.smart.business.exception.NegocioException;
 import br.com.app.smart.business.funcionalidade.dto.FuncionalidadeDTO;
 import br.com.app.smart.business.funcionalidade.dto.GrupoFuncionalidadeDTO;
 import br.com.app.smart.business.funcionalidade.dto.MetaDadoDTO;
+import br.com.app.smart.business.funcionalidade.interfaces.IFuncionalidadeDAO;
 import br.com.app.smart.business.model.Funcionalidade;
 
 @Stateless(mappedName = "FuncionalidadeServiceImp")
-@Remote(value = { IServicoRemoteDAO.class })
+@Remote(value = { IServicoRemoteDAO.class,IFuncionalidadeDAO.class })
 @Local(value = { IServicoLocalDAO.class })
 public class FuncionalidadeServiceImp
-		implements IServicoRemoteDAO<FuncionalidadeDTO>, IServicoLocalDAO<FuncionalidadeDTO> {
+		implements IServicoRemoteDAO<FuncionalidadeDTO>, IServicoLocalDAO<FuncionalidadeDTO>, IFuncionalidadeDAO {
 
 	@EJB(beanName = "GrupoFuncionalidadeServiceImp", beanInterface = IServicoLocalDAO.class)
 	private IServicoLocalDAO<GrupoFuncionalidadeDTO> grupoFuncionalidadeService;
@@ -41,12 +42,11 @@ public class FuncionalidadeServiceImp
 
 				throw new NegocioException(-1, "Obrigatorio uma funcionalidade participar de um grupo");
 			}
-			
+
 			if (dto.getPerfil() == null) {
 
 				throw new NegocioException(-1, "Obrigatorio uma funcionalidade ter um perfil");
 			}
-			
 
 			if (dto.getMetadados() == null || dto.getMetadados().isEmpty()) {
 
@@ -65,8 +65,7 @@ public class FuncionalidadeServiceImp
 				mdo.setFuncionalidade(dto);
 				metaDadoService.alterar(mdo);
 			}
-			
-		
+
 			return dto;
 
 		} catch (Exception e) {
@@ -147,6 +146,17 @@ public class FuncionalidadeServiceImp
 		try {
 
 			return ServiceDAO.bustarPorIntervaloID(this.funcionalidadeFacede, FuncionalidadeDTO.class, range);
+		} catch (Exception e) {
+			throw new InfraEstruturaException(e);
+		}
+	}
+
+	@Override
+	public FuncionalidadeDTO adicionarFuncionalidadeSemRelacionamento(FuncionalidadeDTO funcionalidadeDTO)
+			throws InfraEstruturaException, NegocioException {
+
+		try {
+			return ServiceDAO.adiconar(funcionalidadeFacede, Funcionalidade.class, funcionalidadeDTO);
 		} catch (Exception e) {
 			throw new InfraEstruturaException(e);
 		}

@@ -5,10 +5,10 @@ import java.util.List;
 
 import br.appsmartbusiness.persistencia.conversores.Conversor;
 import br.com.app.smart.business.exception.InfraEstruturaException;
-import br.com.app.smart.business.tela.componete.dto.ComponenteDTO;
-import br.com.app.smart.business.tela.componete.dto.CompositeDTO;
-import br.com.app.smart.business.tela.componete.dto.CompositeImplentationDTO;
-import br.com.app.smart.business.tela.componete.dto.CompositeInterfaceDTO;
+import br.com.app.smart.business.tela.componente.dto.ComponenteDTO;
+import br.com.app.smart.business.tela.componente.dto.CompositeDTO;
+import br.com.app.smart.business.tela.componente.dto.CompositeImplentationDTO;
+import br.com.app.smart.business.tela.componente.dto.CompositeInterfaceDTO;
 import br.smartbusiness.metadado.uicomponent.bean.Componente;
 import br.smartbusiness.metadado.uicomponent.bean.CompositeImp;
 import br.smartbusiness.metadado.uicomponent.bean.CompositeImplentationImp;
@@ -56,7 +56,10 @@ public class ConversorBean {
 
 				for (Propriedade p : componente.getPropriedades()) {
 
-					Propriedade prop = new Propriedade(p.getValor(), "");
+					if(p.getNome().equals("default")){
+						continue;
+					}
+					Propriedade prop = new Propriedade(p.getValor(),"");
 					propriedadesMetadado.add(prop);
 
 				}
@@ -96,11 +99,23 @@ public class ConversorBean {
 	
 	public static IComposite converterCompositeDTOParaIComposite(CompositeDTO compositeDTO) throws InfraEstruturaException{
 		
-		CompositeInterfacesImp componenteInterface =Conversor.converter(compositeDTO.getInterfaces(),CompositeInterfacesImp.class );
-		CompositeImplentationImp componenteImp =  Conversor.converter(compositeDTO.getImpletation(),CompositeImplentationImp.class );
+		CompositeInterfacesImp componenteInterface = converterCompositeInterfacesDTO(compositeDTO.getInterfaces());
+		CompositeImplentationImp componenteImp = converterCompositeImpletationDTO(compositeDTO.getImpletation());
 	
 		CompositeImp componenteDTO = new CompositeImp(componenteInterface,componenteImp);
 		
 		return componenteDTO;
+	}
+
+	public static CompositeImplentationImp converterCompositeImpletationDTO(CompositeImplentationDTO compositeImplentationDTO)
+			throws InfraEstruturaException {
+		CompositeImplentationImp componenteImp =  Conversor.converter(compositeImplentationDTO,CompositeImplentationImp.class );
+		return componenteImp;
+	}
+
+	public static CompositeInterfacesImp converterCompositeInterfacesDTO(CompositeInterfaceDTO compositeInterfaceDTO)
+			throws InfraEstruturaException {
+		CompositeInterfacesImp componenteInterface =Conversor.converter(compositeInterfaceDTO,CompositeInterfacesImp.class );
+		return componenteInterface;
 	}
 }

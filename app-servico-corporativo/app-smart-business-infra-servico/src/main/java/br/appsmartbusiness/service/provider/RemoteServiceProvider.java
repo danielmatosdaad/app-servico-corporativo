@@ -3,6 +3,8 @@ package br.appsmartbusiness.service.provider;
 import java.io.Serializable;
 
 import javax.ejb.EJB;
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.Default;
@@ -23,8 +25,11 @@ import br.com.app.smart.business.funcionalidade.dto.GrupoFuncionalidadeDTO;
 import br.com.app.smart.business.funcionalidade.dto.IdentificadorDTO;
 import br.com.app.smart.business.funcionalidade.dto.MetaDadoDTO;
 import br.com.app.smart.business.funcionalidade.dto.PerfilDTO;
-import br.com.app.smart.business.interfaces.ComponenteTelaService;
+import br.com.app.smart.business.funcionalidade.interfaces.IFuncionalidadeDAO;
+import br.com.app.smart.business.interfaces.IComponenteTelaService;
 import br.com.app.smart.business.parametro.dto.ParametroDTO;
+import br.com.app.smart.business.processoconfiguracao.interfaces.IProcessoConfiguracaoRemote;
+import br.com.app.smart.business.tela.componente.interfaces.IMetaDadoUtilDAO;
 import br.com.app.smart.business.usuario.dto.SenhaDTO;
 import br.com.app.smart.business.usuario.dto.UsuarioDTO;
 
@@ -70,9 +75,25 @@ public class RemoteServiceProvider implements Serializable {
 	@EJB(lookup = "java:global/app-corporativo/app-smart-business-fnc-mdo/IdentificadorServiceImp!br.com.app.smart.business.dao.interfaces.IServicoRemoteDAO", beanName = "IdentificadorServiceImp", beanInterface = IServicoRemoteDAO.class)
 	private IServicoRemoteDAO<IdentificadorDTO> identificadorService;
 	
-	@EJB(lookup = "java:global/app-corporativo/app-smart-business-tela-metadado-xml/ComponenteTelaServiceImp!br.com.app.smart.business.interfaces.ComponenteTelaService", beanName = "ComponenteTelaServiceImp", beanInterface = ComponenteTelaService.class)
-	private ComponenteTelaService componenteTelaService;
+	@EJB(lookup = "java:global/app-corporativo/app-smart-business-tela-metadado-xml/ComponenteTelaServiceImp!br.com.app.smart.business.interfaces.IComponenteTelaService", beanName = "ComponenteTelaServiceImp", beanInterface = IComponenteTelaService.class)
+	private IComponenteTelaService componenteTelaService;
 	
+	@EJB(lookup = "java:global/app-corporativo/app-smart-business-fnc-mdo/MetaDadoServiceImp!br.com.app.smart.business.tela.componente.interfaces.IMetaDadoUtilDAO", beanName = "MetaDadoServiceImp", beanInterface = IMetaDadoUtilDAO.class)
+	private IMetaDadoUtilDAO metaDadoUtilDAO;
+	
+	@EJB(lookup = "java:global/app-corporativo/app-smart-business-fnc-mdo/ProcessoConfiguracaoImp!br.com.app.smart.business.processoconfiguracao.interfaces.IProcessoConfiguracaoRemote", beanName = "ProcessoConfiguracaoImp", beanInterface = IProcessoConfiguracaoRemote.class)
+	private IProcessoConfiguracaoRemote processoConfiguracaoRemote;
+	
+	@EJB(lookup = "java:global/app-corporativo/app-smart-business-fnc-mdo/FuncionalidadeServiceImp!br.com.app.smart.business.funcionalidade.interfaces.IFuncionalidadeDAO", beanName = "FuncionalidadeServiceImp", beanInterface = IFuncionalidadeDAO.class)
+	private IFuncionalidadeDAO funcionalidadeDAO;
+	
+	
+	@Default
+	@Produces
+	public 	IMetaDadoUtilDAO getMetaDadoUtilDAO() {
+		System.out.println("Injetando Servico metaDadoUtilDAO");
+		return metaDadoUtilDAO;
+	}
 	
 	@Default
 	@Produces
@@ -145,9 +166,22 @@ public class RemoteServiceProvider implements Serializable {
 	
 	@Default
 	@Produces
-	public ComponenteTelaService getComponenteTelaService() {
-		System.out.println("Injetando Servico componenteTelaService");
+	public IComponenteTelaService getComponenteTelaService() {
+		System.out.println("Injetando Servico componenteTelaService" + componenteTelaService );
 		return componenteTelaService;
+	}
+	
+	
+	@Default
+	@Produces
+	public IProcessoConfiguracaoRemote getProcessoConfiguracaoRemote() {
+		return processoConfiguracaoRemote;
+	}
+	
+	@Default
+	@Produces
+	public IFuncionalidadeDAO getFuncionalidadeDAO() {
+		return funcionalidadeDAO;
 	}
 
 	/**

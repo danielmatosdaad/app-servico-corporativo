@@ -5,8 +5,8 @@ import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
+import br.appsmartbusiness.persistencia.conversores.Conversor;
 import br.appsmartbusiness.persistencia.service.ServiceDAO;
 import br.com.app.smart.business.dao.facede.MetaDadoFacade;
 import br.com.app.smart.business.dao.interfaces.IServicoLocalDAO;
@@ -16,15 +16,17 @@ import br.com.app.smart.business.exception.NegocioException;
 import br.com.app.smart.business.funcionalidade.dto.IdentificadorDTO;
 import br.com.app.smart.business.funcionalidade.dto.MetaDadoDTO;
 import br.com.app.smart.business.model.MetaDado;
+import br.com.app.smart.business.tela.componente.interfaces.IMetaDadoUtilDAO;
 
 @Stateless
-@Remote(value = { IServicoRemoteDAO.class })
+@Remote(value = { IServicoRemoteDAO.class,IMetaDadoUtilDAO.class })
 @Local(value = { IServicoLocalDAO.class })
-public class MetaDadoServiceImp implements IServicoRemoteDAO<MetaDadoDTO>, IServicoLocalDAO<MetaDadoDTO> {
+public class MetaDadoServiceImp
+		implements IServicoRemoteDAO<MetaDadoDTO>, IServicoLocalDAO<MetaDadoDTO>, IMetaDadoUtilDAO {
 
 	@EJB
 	private MetaDadoFacade metaDadoFacade;
-	
+
 	@EJB(lookup = "java:global/app-corporativo/app-smart-business-fnc-mdo/IdentificadorServiceImp!br.com.app.smart.business.dao.interfaces.IServicoRemoteDAO", beanName = "IdentificadorServiceImp", beanInterface = IServicoRemoteDAO.class)
 	private IServicoRemoteDAO<IdentificadorDTO> identificadorService;
 
@@ -32,15 +34,13 @@ public class MetaDadoServiceImp implements IServicoRemoteDAO<MetaDadoDTO>, IServ
 	public MetaDadoDTO adiconar(MetaDadoDTO dto) throws InfraEstruturaException, NegocioException {
 
 		try {
-			if (dto != null && dto.getId() == null) {
+
 				return ServiceDAO.adiconar(this.metaDadoFacade, MetaDado.class, dto);
-			}
+
 		} catch (Exception e) {
 			throw new InfraEstruturaException(e);
 
 		}
-
-		return dto;
 	}
 
 	@Override
@@ -110,4 +110,23 @@ public class MetaDadoServiceImp implements IServicoRemoteDAO<MetaDadoDTO>, IServ
 			throw new InfraEstruturaException(e);
 		}
 	}
+
+	@Override
+	public MetaDadoDTO buscarMetaDadoFuncionalidade(int idFuncionalidade, int numeroTela)
+			throws InfraEstruturaException {
+
+		try {
+
+			MetaDado mdo = this.metaDadoFacade.buscarPorNumeroTelaFuncionalidade(idFuncionalidade, numeroTela);
+
+			if(mdo==null){
+				return null;
+			}
+			MetaDadoDTO metaDadoDTO = Conversor.converter(mdo, MetaDadoDTO.class);
+			return metaDadoDTO;
+		} catch (Exception e) {
+			throw new InfraEstruturaException(e);
+		}
+	}
+
 }

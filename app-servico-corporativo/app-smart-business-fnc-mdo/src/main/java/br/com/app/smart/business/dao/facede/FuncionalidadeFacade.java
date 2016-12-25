@@ -45,4 +45,6 @@ public class FuncionalidadeFacade extends AbstractFacade<Funcionalidade> {
 		System.out.println("Quantidade todos? " + resultado.size());
 		return resultado;
 	}
+	
+	
 }

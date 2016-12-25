@@ -1,12 +1,13 @@
 package br.smartbusiness.metadado.servico.interfaces;
 
 import br.smartbusiness.metadado.uicomponent.bean.IComposite;
+import br.smartbusiness.metadado.uicomponent.bean.ICompositeInterfaces;
 import br.smartbusiness.metadado.uicomponent.bean.MetaDado;
 
 import java.io.File;
 import java.util.List;
 
-public interface ComponenteService {
+public interface IComponenteServiceLocal {
 
 	/**
 	 * @param files
@@ -19,4 +20,8 @@ public interface ComponenteService {
 	public List<MetaDado> converterComposite(List<IComposite> composites);
 
 	public List<StringBuffer> converterComponenteUI(List<MetaDado> metadados);
+
+	public List<MetaDado> converterCompositeInterfaces(List<ICompositeInterfaces> compositesInterfaces);
+
+	public List<StringBuffer> converterEmXml(List<MetaDado> metadados);
 }

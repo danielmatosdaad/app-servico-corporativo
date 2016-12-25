@@ -1,4 +1,4 @@
-package br.com.app.smart.business.tela.componete.dto;
+package br.com.app.smart.business.tela.componente.dto;
 
 import java.io.Serializable;
 
@@ -11,8 +11,7 @@ public class CompositeDTO implements Serializable {
 
 	private CompositeInterfaceDTO interfaces;
 	private CompositeImplentationDTO impletation;
-	
-	
+	private String icon;
 
 	public CompositeInterfaceDTO getInterfaces() {
 		return interfaces;
@@ -28,6 +27,14 @@ public class CompositeDTO implements Serializable {
 
 	public void setImpletation(CompositeImplentationDTO impletation) {
 		this.impletation = impletation;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
 }

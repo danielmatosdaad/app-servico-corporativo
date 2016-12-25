@@ -36,12 +36,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>br.com.app.smart.business</groupId>
-			<artifactId>app-smart-business-mdo-tla</artifactId>
-			<type>ejb</type>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>br.com.app.smart.business</groupId>
 			<artifactId>app-smart-business-fnc-mdo</artifactId>
 			<type>ejb</type>
 			<version>0.0.1-SNAPSHOT</version>

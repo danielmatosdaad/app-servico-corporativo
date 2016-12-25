@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 import br.smartbusiness.metadado.conversor.ConversorBean;
@@ -12,7 +12,7 @@ import br.smartbusiness.metadado.conversor.ConversorXml;
 import br.smartbusiness.metadado.conversor.ConversorXsl;
 import br.smartbusiness.metadado.conversor.enums.TemplateXsl;
 import br.smartbusiness.metadado.conversor.enums.TipoConversaoXML;
-import br.smartbusiness.metadado.servico.interfaces.ComponenteService;
+import br.smartbusiness.metadado.servico.interfaces.IComponenteServiceLocal;
 import br.smartbusiness.metadado.uicomponent.bean.Componente;
 import br.smartbusiness.metadado.uicomponent.bean.CompositeImp;
 import br.smartbusiness.metadado.uicomponent.bean.CompositeImplentationImp;
@@ -24,8 +24,8 @@ import br.smartbusiness.metadado.uicomponent.bean.MetaDado;
 
 @Named
 @Stateless
-@Remote(value= ComponenteService.class)
-public class ComponenteServiceImp implements ComponenteService {
+@Local(value = { IComponenteServiceLocal.class })
+public class ComponenteServiceImp implements IComponenteServiceLocal {
 
 	@Override
 	public List<IComposite> converterArquivo(List<File> files) {
@@ -50,6 +50,19 @@ public class ComponenteServiceImp implements ComponenteService {
 
 		return composites;
 
+	}
+
+	@Override
+	public List<MetaDado> converterCompositeInterfaces(List<ICompositeInterfaces> compositesInterfaces) {
+
+		List<MetaDado> metadados = new ArrayList<MetaDado>();
+		for (ICompositeInterfaces compositeInterfaces : compositesInterfaces) {
+
+			MetaDado mdo = ConversorBean.converterParaMetadado(compositeInterfaces);
+			metadados.add(mdo);
+		}
+
+		return metadados;
 	}
 
 	@Override
@@ -81,4 +94,18 @@ public class ComponenteServiceImp implements ComponenteService {
 		return metadadosConvertidos;
 	}
 
+	@Override
+	public List<StringBuffer> converterEmXml(List<MetaDado> metadados) {
+
+		List<StringBuffer> resultado = new ArrayList<StringBuffer>();
+		
+		for (MetaDado mdo : metadados) {
+			ConversorXml<StringBuffer> conversorXml = new ConversorXml<>(mdo, MetaDado.class,
+					TipoConversaoXML.INSTANCIA_STRING_BUFFER);
+			
+			resultado.add(conversorXml.converter());
+		}
+	
+		return resultado;
+	}
 }

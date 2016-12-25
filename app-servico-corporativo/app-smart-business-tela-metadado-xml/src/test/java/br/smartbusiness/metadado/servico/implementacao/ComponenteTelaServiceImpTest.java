@@ -10,8 +10,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import br.com.app.smart.business.tela.componete.dto.ComponenteTelaDTO;
-import br.com.app.smart.business.tela.componete.dto.CompositeDTO;
+import br.com.app.smart.business.processoconfiguracao.dto.ResultadoConvercaoComponenteUI;
+import br.com.app.smart.business.tela.componente.dto.ComponenteTelaDTO;
+import br.com.app.smart.business.tela.componente.dto.CompositeDTO;
 import br.smartbusiness.metadado.infra.xml.conversor.ConversorXslTest;
 
 public class ComponenteTelaServiceImpTest {
@@ -26,12 +27,12 @@ public class ComponenteTelaServiceImpTest {
 		componenteEmArquivo.add(file);
 		ComponenteTelaServiceImp servico = new ComponenteTelaServiceImp();
 		List<CompositeDTO> composites = servico.converterArquivo(componenteEmArquivo);
-		
+
 		Assert.assertNotNull(composites);
 		Assert.assertNotNull(composites.get(0));
 
 	}
-	
+
 	@Test
 	public void testConverterCompositeDTOEmComponenteTelaDTO() {
 
@@ -42,17 +43,17 @@ public class ComponenteTelaServiceImpTest {
 		componenteEmArquivo.add(file);
 		ComponenteTelaServiceImp servico = new ComponenteTelaServiceImp();
 		List<CompositeDTO> composites = servico.converterArquivo(componenteEmArquivo);
-		
+
 		Assert.assertNotNull(composites);
 		Assert.assertNotNull(composites.get(0));
-		
+
 		List<ComponenteTelaDTO> componentesTelaDTO = servico.converterComposite(composites);
-		
+
 		Assert.assertNotNull(componentesTelaDTO);
 		Assert.assertNotNull(componentesTelaDTO.get(0));
 
 	}
-	
+
 	@Test
 	public void testConverterComponenteTelaDTOComponeteUI() {
 
@@ -63,21 +64,20 @@ public class ComponenteTelaServiceImpTest {
 		componenteEmArquivo.add(file);
 		ComponenteTelaServiceImp servico = new ComponenteTelaServiceImp();
 		List<CompositeDTO> composites = servico.converterArquivo(componenteEmArquivo);
-		
+
 		Assert.assertNotNull(composites);
 		Assert.assertNotNull(composites.get(0));
-		
+
 		List<ComponenteTelaDTO> componentesTelaDTO = servico.converterComposite(composites);
-		
+
 		Assert.assertNotNull(componentesTelaDTO);
 		Assert.assertNotNull(componentesTelaDTO.get(0));
-		
-		List<StringBuffer> componentesUI = servico.converterComponenteUI(componentesTelaDTO);
 
-		Assert.assertNotNull(componentesUI);
-		Assert.assertNotNull(componentesUI.get(0));
-		System.out.println(componentesUI.get(0));
+		ResultadoConvercaoComponenteUI resultado = servico.converterComponenteUI(componentesTelaDTO);
+
+		Assert.assertNotNull(resultado.getComponeteXhtml());
+		Assert.assertNotNull(resultado.getComponeteXhtml().get(0));
+		System.out.println(resultado.getComponeteXhtml().get(0));
 	}
 
-	
 }
